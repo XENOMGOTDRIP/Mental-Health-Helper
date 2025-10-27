@@ -1,0 +1,47 @@
+# Mental Health Helper – Mental Wellness Bot
+# Made by Arinjay
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from datetime import datetime
+
+print("💬 Welcome to the Health Helper Bot!")
+name = input("What's your name? ")
+
+print(f"\nHi {name}! I'm here to help you reflect on how you're feeling today.")
+print("Type 'exit' anytime to stop.\n")
+
+mood_list = []
+
+while True:
+    mood = input("How are you feeling today? (happy/sad/stressed/exit): ").lower()
+    if mood == "exit":
+        break
+
+    tips = {
+        "happy": f"That's great, {name}! Keep spreading positivity 😊",
+        "sad": f"I'm sorry to hear that, {name}. Try writing down 3 things you're grateful for 💛",
+        "stressed": f"Take a deep breath, {name}. Inhale 4 sec, hold 4 sec, exhale 4 sec 🌿"
+    }
+
+    print(tips.get(mood, f"I hope your day improves, {name}! 💪"))
+    mood_list.append({"time": datetime.now(), "name": name, "mood": mood})
+
+# Save data to CSV
+if mood_list:
+    df = pd.DataFrame(mood_list)
+    df.to_csv("mood_log.csv", index=False)
+    print(f"\n✅ Mood data saved for {name}!")
+
+    # Plot mood entries
+    plt.figure(figsize=(8,4))
+    plt.plot(df["time"], range(len(df)), marker='o')
+    plt.title(f"{name}'s Mood Tracker")
+    plt.xlabel("Date/Time")
+    plt.ylabel("Mood Entries")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+else:
+    print("No moods recorded. Goodbye!")
+
